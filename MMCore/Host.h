@@ -24,6 +24,8 @@
 #include <string>
 #include <vector>
 
+#pragma comment(lib, "IPHLPAPI.LIB")
+
 typedef long long MACValue;
 
 
