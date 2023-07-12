@@ -20,12 +20,12 @@
 
 #pragma once
 
-#ifdef WIN32
+//#ifdef WIN32
    #define WIN32_LEAN_AND_MEAN
    #include <windows.h>
-#else
-   #include <pthread.h>
-#endif
+//#else
+ //  #include <pthread.h>
+//#endif
 
 /**
  * Base class for threads in MM devices
@@ -40,22 +40,22 @@ public:
 
    virtual int activate()
    {
-#ifdef _WIN32
+//#ifdef _WIN32
       DWORD id;
       thread_ = CreateThread(NULL, 0, ThreadProc, this, 0, &id);
-#else
-      pthread_create(&thread_, NULL, ThreadProc, this);
-#endif
+//#else
+ //     pthread_create(&thread_, NULL, ThreadProc, this);
+//#endif
       return 0; // TODO: return thread id
    }
 
    void wait()
    {
-#ifdef _WIN32
+//#ifdef _WIN32
       WaitForSingleObject(thread_, INFINITE);
-#else
-      pthread_join(thread_, NULL);
-#endif
+//#else
+ //     pthread_join(thread_, NULL);
+//#endif
    }
 
 private:
@@ -63,28 +63,28 @@ private:
    MMDeviceThreadBase(const MMDeviceThreadBase&);
    MMDeviceThreadBase& operator=(const MMDeviceThreadBase&);
 
-#ifdef _WIN32
+//#ifdef _WIN32
    HANDLE
-#else
-   pthread_t
-#endif
+//#else
+  // pthread_t
+//#endif
    thread_;
 
    static
-#ifdef _WIN32
+//#ifdef _WIN32
    DWORD WINAPI
-#else
-   void*
-#endif
+//#else
+//   void*
+//#endif
    ThreadProc(void* param)
    {
       MMDeviceThreadBase* pThrObj = (MMDeviceThreadBase*) param;
-#ifdef _WIN32
+//#ifdef _WIN32
       return pThrObj->svc();
-#else
-      pThrObj->svc();
-      return (void*) 0;
-#endif
+//#else
+//      pThrObj->svc();
+//      return (void*) 0;
+//#endif
    }
 };
 
@@ -96,49 +96,49 @@ class MMThreadLock
 public:
    MMThreadLock()
    {
-#ifdef _WIN32
+//#ifdef _WIN32
       InitializeCriticalSection(&lock_);
-#else
-      pthread_mutexattr_t a;
-      pthread_mutexattr_init(&a);
-      pthread_mutexattr_settype(&a,
-#ifdef __linux__
-         // Not sure if _NP is needed any more
-         PTHREAD_MUTEX_RECURSIVE_NP
-#else
-         PTHREAD_MUTEX_RECURSIVE
-#endif
-      );
-      pthread_mutex_init(&lock_, &a);
-      pthread_mutexattr_destroy(&a);
-#endif
+//#else
+//      pthread_mutexattr_t a;
+//      pthread_mutexattr_init(&a);
+//      pthread_mutexattr_settype(&a,
+//#ifdef __linux__
+//         // Not sure if _NP is needed any more
+ //        PTHREAD_MUTEX_RECURSIVE_NP
+//#else
+//         PTHREAD_MUTEX_RECURSIVE
+//#endif
+ //     );
+  //    pthread_mutex_init(&lock_, &a);
+   //   pthread_mutexattr_destroy(&a);
+//#endif
    }
 
    ~MMThreadLock()
    {
-#ifdef _WIN32
+//#ifdef _WIN32
       DeleteCriticalSection(&lock_);
-#else
-      pthread_mutex_destroy(&lock_);
-#endif
+//#else
+ //     pthread_mutex_destroy(&lock_);
+//#endif
    }
 
    void Lock()
    {
-#ifdef _WIN32
+//#ifdef _WIN32
       EnterCriticalSection(&lock_);
-#else
-      pthread_mutex_lock(&lock_);
-#endif
+//#else
+ //     pthread_mutex_lock(&lock_);
+//#endif
    }
 
    void Unlock()
    {
-#ifdef _WIN32
+//#ifdef _WIN32
       LeaveCriticalSection(&lock_);
-#else
-      pthread_mutex_unlock(&lock_);
-#endif
+//#else
+//      pthread_mutex_unlock(&lock_);
+//#endif
    }
 
 private:
@@ -146,11 +146,11 @@ private:
    MMThreadLock(const MMThreadLock&);
    MMThreadLock& operator=(const MMThreadLock&);
 
-#ifdef _WIN32
+//#ifdef _WIN32
    CRITICAL_SECTION
-#else
-   pthread_mutex_t
-#endif
+//#else
+ //  pthread_mutex_t
+//#endif
    lock_;
 };
 
