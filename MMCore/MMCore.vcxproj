@@ -78,7 +78,8 @@
       <AdditionalDependencies>Iphlpapi.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>copy /y  /d "$(TargetDir)*.dll" "$(SolutionDir)..\Photon\PhotonCore\Resource"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
